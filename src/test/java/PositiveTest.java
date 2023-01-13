@@ -5,7 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import static java.lang.System.setProperty;
 
-public class PageTest {
+public class PositiveTest {
 
     private WebDriver driver;
 
