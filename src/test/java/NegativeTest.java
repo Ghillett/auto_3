@@ -11,7 +11,6 @@ public class NegativeTest {
 
     @BeforeAll
     static void setUpAll() {
-        //System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
         WebDriverManager.chromedriver().setup();
     }
 
@@ -36,7 +35,7 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Поле обязательно для заполнения";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=name] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -48,13 +47,39 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Поле обязательно для заполнения";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=phone] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void shouldTestEmptyFormWithNameAndPhone() {
+    void shouldTestEmptyName() {
+        driver.get("http://localhost:9999/");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+75845615974");
+        driver.findElement(By.cssSelector("[data-test-id=agreement] span")).click();
+        driver.findElement(By.cssSelector("[role=button]")).click();
+
+        String expected = "Поле обязательно для заполнения";
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldTestEmptyPhone() {
+        driver.get("http://localhost:9999/");
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Петров Иван");
+        driver.findElement(By.cssSelector("[data-test-id=agreement] span")).click();
+        driver.findElement(By.cssSelector("[role=button]")).click();
+
+        String expected = "Поле обязательно для заполнения";
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldTestEmptyAgreement() {
         driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Петров Иван");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+75845615974");
@@ -67,7 +92,7 @@ public class NegativeTest {
     }
 
     @Test
-    void shouldTestLatin() {
+    void shouldTestLatinForName() {
         driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Petrov Ivan");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+75845615974");
@@ -75,7 +100,7 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=name] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -89,7 +114,21 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=name] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldTestDigitsForName() {
+        driver.get("http://localhost:9999/");
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("12345");
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+75845615974");
+        driver.findElement(By.cssSelector("[data-test-id=agreement] span")).click();
+        driver.findElement(By.cssSelector("[role=button]")).click();
+
+        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        String actual = driver.findElement(By.cssSelector("[data-test-id=name].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -103,7 +142,7 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=phone] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -117,13 +156,13 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=phone] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void shouldTestShorterNumber(){
+    void shouldTestShorterNumber() {
         driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Петров Иван");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+7584561597");
@@ -131,13 +170,13 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=phone] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void shouldTestLongerNumber(){
+    void shouldTestLongerNumber() {
         driver.get("http://localhost:9999/");
         driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Петров Иван");
         driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys("+758456159751");
@@ -145,7 +184,7 @@ public class NegativeTest {
         driver.findElement(By.cssSelector("[role=button]")).click();
 
         String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-        String actual = driver.findElement(By.cssSelector("[data-test-id=phone] .input__sub")).getText().trim();
+        String actual = driver.findElement(By.cssSelector("[data-test-id=phone].input_invalid .input__sub")).getText().trim();
 
         Assertions.assertEquals(expected, actual);
     }
